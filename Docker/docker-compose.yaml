@@ -1,0 +1,27 @@
+--- 
+services: 
+  kong: 
+    environment: 
+      KONG_DATABASE: "off" 
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+      KONG_DECLARATIVE_CONFIG: /tmp/kong.yml
+      KONG_LOG_LEVEL: debug
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_PROXY_LISTEN: "0.0.0.0:8000"
+      KONG_PROXY_LISTEN_SSL: "0.0.0.0:8443"
+    image: kong-nitin
+    ports: 
+      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8443:8443"
+      - "127.0.0.1:8001:8001"
+      - "127.0.0.1:8444:8444"
+    restart: unless-stopped
+    volumes: 
+      - "/Users/nsahai/ping-intelligence-kong-integration/Docker/kong/kong.yml:/tmp/kong.yml"
+      - "/Users/nsahai/kong-header-plugin/kong-header-plugin/Docker/kong/kong.conf:/etc/kong/kong.conf"
+      - "/Users/nsahai/ping-intelligence-kong-integration/kong-pingase-plugin/kong-plugin-header-1.0.0-0.src.rock:/tmp/kong-plugin-header-1.0.0-0.src.rock"
+version: "3.4"
+

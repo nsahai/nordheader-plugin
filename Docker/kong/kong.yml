@@ -1,0 +1,62 @@
+# ------------------------------------------------------------------------------
+# This is an example file to get you started with using
+# declarative configuration in Kong.
+# ------------------------------------------------------------------------------
+
+# Metadata fields start with an underscore (_)
+# Fields that do not start with an underscore represent Kong entities and attributes
+
+# _format_version is mandatory,
+# it specifies the minimum version of Kong that supports the format
+
+_format_version: "1.1"
+
+# Each Kong entity (core entity or custom entity introduced by a plugin)
+# can be listed in the top-level as an array of objects:
+
+services:
+ - name: shop
+   url: http://rcbj.net
+   routes:
+   - name: shop-route
+     paths:
+     - /shop
+   plugins:
+   - name: basic-auth 
+   - name: pingase
+
+routes:
+- name: another-route
+  service: shop
+  hosts: ["rcbj.net"]
+
+consumers:
+- username: rcbj
+  basicauth_credentials:
+  - username: rcbj
+    password: password123
+
+# When an entity has multiple foreign-key relationships
+# (e.g. a plugin matching on both consumer and service)
+# it must be specified as a top-level entity, and not through
+# nesting.
+
+plugins:
+ - name: basic-auth
+   service: shop
+   _comment: "An example configuration of pingase"
+   config:
+     ase_primary_host: 54.215.250.15
+     ase_secondary_host: 54.215.250.15
+     ase_port:  8443
+     ase_token: 1ebd5fde1b0b4373a1ad8b8724d13813
+     ase_timeout: 10000
+     ase_keepalive: 60000
+     ase_failover: true
+     retry_max: 3
+     access_tkn: access_token
+     use_tls:  true
+     sni_name: test.ase.pi
+     tls_verify: false
+   tags:
+   - api_security
